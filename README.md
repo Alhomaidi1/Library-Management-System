@@ -21,10 +21,10 @@ A web-based Library Management System with **dual-language support**, **dark mod
 > Light Mode & Dark Mode preview  
 
 ### Light Mode  
-![Light Mode](screenshots/light-mode.png)
+![Light Mode](screenshots\Light_mode.png)
 
 ### Dark Mode  
-![Dark Mode](screenshots/dark-mode.png)
+![Dark Mode](screenshots\Dark_mode.png)
 
 ---
 
