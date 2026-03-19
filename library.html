@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المكتبة الإلكتروني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="library.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">📚</div>
+                <div>
+                    <h1 data-lang="ar">نظام إدارة المكتبة الإلكتروني</h1>
+                    <h1 data-lang="en" style="display: none;">Library Management System</h1>
+                    <p data-lang="ar">أداة متكاملة لإدارة محتويات مكتبتك بكل سهولة</p>
+                    <p data-lang="en" style="display: none;">Complete tool for managing your library contents easily</p>
+                </div>
+            </div>
+            
+            <div class="header-controls">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i> 
+                    <span data-lang="ar">الوضع الليلي</span>
+                    <span data-lang="en" style="display: none;">Dark Mode</span>
+                </button>
+                <button class="lang-toggle" onclick="toggleLanguage()">
+                    <i class="fas fa-language"></i> 
+                    <span data-lang="ar">English</span>
+                    <span data-lang="en" style="display: none;">العربية</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- القائمة الجانبية -->
+        <div class="sidebar">
+            <button class="menu-btn active" onclick="showPage('dashboard')">
+                <i class="fas fa-chart-line"></i>
+                <span data-lang="ar">لوحة التحكم</span>
+                <span data-lang="en" style="display: none;">Dashboard</span>
+            </button>
+            <button class="menu-btn" onclick="showPage('books')">
+                <i class="fas fa-book"></i>
+                <span data-lang="ar">إدارة الكتب</span>
+                <span data-lang="en" style="display: none;">Books Management</span>
+            </button>
+            <button class="menu-btn" onclick="showPage('members')">
+                <i class="fas fa-users"></i>
+                <span data-lang="ar">إدارة الأعضاء</span>
+                <span data-lang="en" style="display: none;">Members Management</span>
+            </button>
+            <button class="menu-btn" onclick="showPage('borrow')">
+                <i class="fas fa-exchange-alt"></i>
+                <span data-lang="ar">إدارة الاستعارة</span>
+                <span data-lang="en" style="display: none;">Borrow Management</span>
+            </button>
+            <button class="menu-btn" onclick="showPage('reports')">
+                <i class="fas fa-chart-bar"></i>
+                <span data-lang="ar">التقارير</span>
+                <span data-lang="en" style="display: none;">Reports</span>
+            </button>
+            <button class="menu-btn" onclick="showPage('settings')">
+                <i class="fas fa-cog"></i>
+                <span data-lang="ar">الإعدادات</span>
+                <span data-lang="en" style="display: none;">Settings</span>
+            </button>
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <div class="main-content">
+            <!-- لوحة التحكم -->
+            <div id="dashboard" class="page active">
+                <h2 data-lang="ar">📊 لوحة التحكم الرئيسية</h2>
+                <h2 data-lang="en" style="display: none;">📊 Main Dashboard</h2>
+                <p data-lang="ar">نظرة عامة على إحصائيات المكتبة وأدائها</p>
+                <p data-lang="en" style="display: none;">Overview of library statistics and performance</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card books">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-number" id="totalBooks">0</div>
+                        <div class="stat-label" data-lang="ar">إجمالي الكتب</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Total Books</div>
+                    </div>
+                    <div class="stat-card members">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-number" id="totalMembers">0</div>
+                        <div class="stat-label" data-lang="ar">إجمالي الأعضاء</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Total Members</div>
+                    </div>
+                    <div class="stat-card borrowed">
+                        <div class="stat-icon">🔄</div>
+                        <div class="stat-number" id="borrowedBooks">0</div>
+                        <div class="stat-label" data-lang="ar">كتب مستعارة</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Borrowed Books</div>
+                    </div>
+                    
+                </div>
+
+                <div class="table-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 data-lang="ar">أحدث الكتب المضافة</h3>
+                        <h3 data-lang="en" style="display: none;">Recently Added Books</h3>
+                        <button class="btn btn-primary" onclick="showPage('books')">
+                            <span data-lang="ar">عرض الكل</span>
+                            <span data-lang="en" style="display: none;">View All</span>
+                        </button>
+                    </div>
+                    <table id="recentBooks">
+                        <thead>
+                            <tr>
+                                <th data-lang="ar">العنوان</th>
+                                <th data-lang="en" style="display: none;">Title</th>
+                                <th data-lang="ar">المؤلف</th>
+                                <th data-lang="en" style="display: none;">Author</th>
+                                <th data-lang="ar">التصنيف</th>
+                                <th data-lang="en" style="display: none;">Category</th>
+                                <th data-lang="ar">السعر</th>
+                                <th data-lang="en" style="display: none;">Price</th>
+                                <th data-lang="ar">الحالة</th>
+                                <th data-lang="en" style="display: none;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container">
+                    <h3 data-lang="ar">آخر الاستعارات</h3>
+                    <h3 data-lang="en" style="display: none;">Recent Borrows</h3>
+                    <table id="recentBorrows">
+                        <thead>
+                            <tr>
+                                <th data-lang="ar">العضو</th>
+                                <th data-lang="en" style="display: none;">Member</th>
+                                <th data-lang="ar">الكتاب</th>
+                                <th data-lang="en" style="display: none;">Book</th>
+                                <th data-lang="ar">تاريخ الاستعارة</th>
+                                <th data-lang="en" style="display: none;">Borrow Date</th>
+                                <th data-lang="ar">موعد الإرجاع</th>
+                                <th data-lang="en" style="display: none;">Due Date</th>
+                                <th data-lang="ar">الحالة</th>
+                                <th data-lang="en" style="display: none;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- إدارة الكتب -->
+            <div id="books" class="page">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 data-lang="ar">📚 إدارة الكتب</h2>
+                    <h2 data-lang="en" style="display: none;">📚 Books Management</h2>
+                    <button class="btn btn-success" onclick="showModal('addBookModal')">
+                        <i class="fas fa-plus"></i>
+                        <span data-lang="ar">إضافة كتاب جديد</span>
+                        <span data-lang="en" style="display: none;">Add New Book</span>
+                    </button>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchBooks" 
+                           data-lang-placeholder-ar="ابحث عن كتاب..."
+                           data-lang-placeholder-en="Search for a book..."
+                           placeholder="ابحث عن كتاب...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+
+                <div class="table-container">
+                    <table id="booksTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th data-lang="ar">العنوان</th>
+                                <th data-lang="en" style="display: none;">Title</th>
+                                <th data-lang="ar">المؤلف</th>
+                                <th data-lang="en" style="display: none;">Author</th>
+                                <th data-lang="ar">التصنيف</th>
+                                <th data-lang="en" style="display: none;">Category</th>
+                                <th data-lang="ar">السعر</th>
+                                <th data-lang="en" style="display: none;">Price</th>
+                                <th data-lang="ar">الكمية</th>
+                                <th data-lang="en" style="display: none;">Quantity</th>
+                                <th data-lang="ar">الحالة</th>
+                                <th data-lang="en" style="display: none;">Status</th>
+                                <th data-lang="ar">الإجراءات</th>
+                                <th data-lang="en" style="display: none;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- إدارة الأعضاء -->
+            <div id="members" class="page">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 data-lang="ar">👥 إدارة الأعضاء</h2>
+                    <h2 data-lang="en" style="display: none;">👥 Members Management</h2>
+                    <button class="btn btn-success" onclick="showModal('addMemberModal')">
+                        <i class="fas fa-user-plus"></i>
+                        <span data-lang="ar">إضافة عضو جديد</span>
+                        <span data-lang="en" style="display: none;">Add New Member</span>
+                    </button>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchMembers" 
+                           data-lang-placeholder-ar="ابحث عن عضو..."
+                           data-lang-placeholder-en="Search for a member..."
+                           placeholder="ابحث عن عضو...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+
+                <div class="table-container">
+                    <table id="membersTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th data-lang="ar">الاسم</th>
+                                <th data-lang="en" style="display: none;">Name</th>
+                                <th data-lang="ar">البريد الإلكتروني</th>
+                                <th data-lang="en" style="display: none;">Email</th>
+                                <th data-lang="ar">الهاتف</th>
+                                <th data-lang="en" style="display: none;">Phone</th>
+                                <th data-lang="ar">العنوان</th>
+                                <th data-lang="en" style="display: none;">Address</th>
+                                <th data-lang="ar">تاريخ الانضمام</th>
+                                <th data-lang="en" style="display: none;">Join Date</th>
+                                <th data-lang="ar">الحالة</th>
+                                <th data-lang="en" style="display: none;">Status</th>
+                                <th data-lang="ar">الإجراءات</th>
+                                <th data-lang="en" style="display: none;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- إدارة الاستعارة -->
+            <div id="borrow" class="page">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 data-lang="ar">🔄 إدارة الاستعارة</h2>
+                    <h2 data-lang="en" style="display: none;">🔄 Borrow Management</h2>
+                    <button class="btn btn-success" onclick="showModal('borrowBookModal')">
+                        <i class="fas fa-handshake"></i>
+                        <span data-lang="ar">استعارة جديدة</span>
+                        <span data-lang="en" style="display: none;">New Borrow</span>
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-number" id="overdueBooks">0</div>
+                        <div class="stat-label" data-lang="ar">مستحقة الإرجاع</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Overdue Books</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-number" id="activeBorrows">0</div>
+                        <div class="stat-label" data-lang="ar">مستعارة حالياً</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Active Borrows</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-number" id="borrowRate">0%</div>
+                        <div class="stat-label" data-lang="ar">نسبة الإعارة</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Borrow Rate</div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <h3 data-lang="ar">سجلات الاستعارة النشطة</h3>
+                    <h3 data-lang="en" style="display: none;">Active Borrow Records</h3>
+                    <table id="borrowTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th data-lang="ar">العضو</th>
+                                <th data-lang="en" style="display: none;">Member</th>
+                                <th data-lang="ar">الكتاب</th>
+                                <th data-lang="en" style="display: none;">Book</th>
+                                <th data-lang="ar">تاريخ الاستعارة</th>
+                                <th data-lang="en" style="display: none;">Borrow Date</th>
+                                <th data-lang="ar">موعد الإرجاع</th>
+                                <th data-lang="en" style="display: none;">Due Date</th>
+                                <th data-lang="ar">الأيام المتبقية</th>
+                                <th data-lang="en" style="display: none;">Days Remaining</th>
+                                <th data-lang="ar">الإجراءات</th>
+                                <th data-lang="en" style="display: none;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- التقارير -->
+            <div id="reports" class="page">
+                <h2 data-lang="ar">📈 التقارير والإحصائيات</h2>
+                <h2 data-lang="en" style="display: none;">📈 Reports & Statistics</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-number" id="borrowPercentage">0%</div>
+                        <div class="stat-label" data-lang="ar">نسبة الإعارة</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Borrow Percentage</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-number" id="popularBooks">0</div>
+                        <div class="stat-label" data-lang="ar">الكتب الأكثر إعارة</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Most Popular Books</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👑</div>
+                        <div class="stat-number" id="activeMembers">0</div>
+                        <div class="stat-label" data-lang="ar">أعضاء نشطين</div>
+                        <div class="stat-label" data-lang="en" style="display: none;">Active Members</div>
+                    </div>
+                                                 </div>
+
+                <div class="table-container">
+                    <h3 data-lang="ar">أفضل الكتب إعارة</h3>
+                    <h3 data-lang="en" style="display: none;">Most Borrowed Books</h3>
+                    <table id="popularBooksTable">
+                        <thead>
+                            <tr>
+                                <th data-lang="ar">الكتاب</th>
+                                <th data-lang="en" style="display: none;">Book</th>
+                                <th data-lang="ar">المؤلف</th>
+                                <th data-lang="en" style="display: none;">Author</th>
+                                <th data-lang="ar">عدد مرات الإعارة</th>
+                                <th data-lang="en" style="display: none;">Borrow Count</th>
+                                <th data-lang="ar">التصنيف</th>
+                                <th data-lang="en" style="display: none;">Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container">
+                    <h3 data-lang="ar">الأعضاء النشطين</h3>
+                    <h3 data-lang="en" style="display: none;">Active Members</h3>
+                    <table id="activeMembersTable">
+                        <thead>
+                            <tr>
+                                <th data-lang="ar">الاسم</th>
+                                <th data-lang="en" style="display: none;">Name</th>
+                                <th data-lang="ar">عدد الكتب المستعارة</th>
+                                <th data-lang="en" style="display: none;">Borrowed Books</th>
+                                <th data-lang="ar">آخر استعارة</th>
+                                <th data-lang="en" style="display: none;">Last Borrow</th>
+                                <th data-lang="ar">الحالة</th>
+                                <th data-lang="en" style="display: none;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- الإعدادات -->
+            <div id="settings" class="page">
+                <h2 data-lang="ar">⚙️ الإعدادات</h2>
+                <h2 data-lang="en" style="display: none;">⚙️ Settings</h2>
+                
+                <div class="table-container">
+                    <h3 data-lang="ar">إعدادات النظام</h3>
+                    <h3 data-lang="en" style="display: none;">System Settings</h3>
+                    <div class="form-group">
+                        <label data-lang="ar">اسم المكتبة:</label>
+                        <label data-lang="en" style="display: none;">Library Name:</label>
+                        <input type="text" class="form-control" id="libraryName" value="مكتبة المعرفة">
+                    </div>
+                    <div class="form-group">
+                        <label data-lang="ar">فترة الاستعارة (أيام):</label>
+                        <label data-lang="en" style="display: none;">Borrow Period (Days):</label>
+                        <input type="number" class="form-control" id="borrowPeriod" value="14">
+                    </div>
+                    <div class="form-group">
+                        <label data-lang="ar">الغرامة اليومية (دينار):</label>
+                        <label data-lang="en" style="display: none;">Daily Fine (SAR):</label>
+                        <input type="number" class="form-control" id="dailyFine" value="5">
+                    </div>
+                    <button class="btn btn-success" onclick="saveSettings()">
+                        <span data-lang="ar">حفظ الإعدادات</span>
+                        <span data-lang="en" style="display: none;">Save Settings</span>
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <h3 data-lang="ar">نسخ احتياطي</h3>
+                    <h3 data-lang="en" style="display: none;">Backup</h3>
+                    <p data-lang="ar">احفظ نسخة احتياطية من بيانات المكتبة</p>
+                    <p data-lang="en" style="display: none;">Save a backup of library data</p>
+                    <button class="btn btn-primary" onclick="exportData()">
+                        <span data-lang="ar">تصدير البيانات</span>
+                        <span data-lang="en" style="display: none;">Export Data</span>
+                    </button>
+                    <button class="btn btn-warning" onclick="importData()">
+                        <span data-lang="ar">استيراد البيانات</span>
+                        <span data-lang="en" style="display: none;">Import Data</span>
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <h3 data-lang="ar">إحصائيات النظام</h3>
+                    <h3 data-lang="en" style="display: none;">System Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">💾</div>
+                            <div class="stat-number" id="storageUsage">0%</div>
+                            <div class="stat-label" data-lang="ar">استخدام التخزين</div>
+                            <div class="stat-label" data-lang="en" style="display: none;">Storage Usage</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔄</div>
+                            <div class="stat-number" id="totalOperations">0</div>
+                            <div class="stat-label" data-lang="ar">إجمالي العمليات</div>
+                            <div class="stat-label" data-lang="en" style="display: none;">Total Operations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نماذج منبثقة -->
+    <!-- نموذج إضافة كتاب -->
+    <div id="addBookModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-lang="ar">📖 إضافة كتاب جديد</div>
+                <div class="modal-title" data-lang="en" style="display: none;">📖 Add New Book</div>
+                <button class="close" onclick="hideModal('addBookModal')">&times;</button>
+            </div>
+            <form id="addBookForm">
+                <div class="form-group">
+                    <label data-lang="ar">عنوان الكتاب:</label>
+                    <label data-lang="en" style="display: none;">Book Title:</label>
+                    <input type="text" class="form-control" id="bookTitle" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">المؤلف:</label>
+                    <label data-lang="en" style="display: none;">Author:</label>
+                    <input type="text" class="form-control" id="bookAuthor" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">التصنيف:</label>
+                    <label data-lang="en" style="display: none;">Category:</label>
+                    <select class="form-control" id="bookCategory" required>
+                        <option value="" data-lang="ar">اختر التصنيف</option>
+                        <option value="" data-lang="en" style="display: none;">Select Category</option>
+                        <option value="رواية" data-lang="ar">رواية</option>
+                        <option value="Novel" data-lang="en" style="display: none;">Novel</option>
+                        <option value="علمي" data-lang="ar">علمي</option>
+                        <option value="Science" data-lang="en" style="display: none;">Science</option>
+                        <option value="تاريخ" data-lang="ar">تاريخ</option>
+                        <option value="History" data-lang="en" style="display: none;">History</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">السعر (دينار):</label>
+                    <label data-lang="en" style="display: none;">Price (SAR):</label>
+                    <input type="number" class="form-control" id="bookPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">الكمية:</label>
+                    <label data-lang="en" style="display: none;">Quantity:</label>
+                    <input type="number" class="form-control" id="bookQuantity" required>
+                </div>
+                <button type="submit" class="btn btn-success" data-lang="ar">حفظ الكتاب</button>
+                <button type="submit" class="btn btn-success" data-lang="en" style="display: none;">Save Book</button>
+                <button type="button" class="btn btn-warning" onclick="hideModal('addBookModal')" data-lang="ar">إلغاء</button>
+                <button type="button" class="btn btn-warning" onclick="hideModal('addBookModal')" data-lang="en" style="display: none;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة عضو -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-lang="ar">👥 إضافة عضو جديد</div>
+                <div class="modal-title" data-lang="en" style="display: none;">👥 Add New Member</div>
+                <button class="close" onclick="hideModal('addMemberModal')">&times;</button>
+            </div>
+            <form id="addMemberForm">
+                <div class="form-group">
+                    <label data-lang="ar">الاسم الكامل:</label>
+                    <label data-lang="en" style="display: none;">Full Name:</label>
+                    <input type="text" class="form-control" id="memberName" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">البريد الإلكتروني:</label>
+                    <label data-lang="en" style="display: none;">Email:</label>
+                    <input type="email" class="form-control" id="memberEmail" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">رقم الهاتف:</label>
+                    <label data-lang="en" style="display: none;">Phone Number:</label>
+                    <input type="tel" class="form-control" id="memberPhone" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">العنوان:</label>
+                    <label data-lang="en" style="display: none;">Address:</label>
+                    <textarea class="form-control" id="memberAddress" rows="2" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-success" data-lang="ar">حفظ العضو</button>
+                <button type="submit" class="btn btn-success" data-lang="en" style="display: none;">Save Member</button>
+                <button type="button" class="btn btn-warning" onclick="hideModal('addMemberModal')" data-lang="ar">إلغاء</button>
+                <button type="button" class="btn btn-warning" onclick="hideModal('addMemberModal')" data-lang="en" style="display: none;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نموذج استعارة كتاب -->
+    <div id="borrowBookModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-lang="ar">🔄 استعارة كتاب</div>
+                <div class="modal-title" data-lang="en" style="display: none;">🔄 Borrow Book</div>
+                <button class="close" onclick="hideModal('borrowBookModal')">&times;</button>
+            </div>
+            <form id="borrowBookForm">
+                <div class="form-group">
+                    <label data-lang="ar">اختر العضو:</label>
+                    <label data-lang="en" style="display: none;">Select Member:</label>
+                    <select class="form-control" id="borrowMember" required>
+                        <option value="" data-lang="ar">اختر العضو</option>
+                        <option value="" data-lang="en" style="display: none;">Select Member</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">اختر الكتاب:</label>
+                    <label data-lang="en" style="display: none;">Select Book:</label>
+                    <select class="form-control" id="borrowBook" required>
+                        <option value="" data-lang="ar">اختر الكتاب</option>
+                        <option value="" data-lang="en" style="display: none;">Select Book</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-lang="ar">فترة الاستعارة (أيام):</label>
+                    <label data-lang="en" style="display: none;">Borrow Period (Days):</label>
+                    <input type="number" class="form-control" id="borrowDays" value="14" required>
+                </div>
+                <button type="submit" class="btn btn-success" data-lang="ar">تأكيد الاستعارة</button>
+                <button type="submit" class="btn btn-success" data-lang="en" style="display: none;">Confirm Borrow</button>
+                <button type="button" class="btn btn-warning" onclick="hideModal('borrowBookModal')" data-lang="ar">إلغاء</button>
+                <button type="button" class="btn btn-warning" onclick="hideModal('borrowBookModal')" data-lang="en" style="display: none;">Cancel</button>
+            </form>
+        </div>
+    </div>
+ <script src="library.js"></script>
+
+
+</body>
+</html>
